@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodExpress - Delicious Food Delivered</title>
+
+    <!-- Internal CSS starts here -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #fff;
+            color: #333;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            background: #ff4757;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 2rem;
+            color: white;
+            text-decoration: none;
+        }
+
+        .navbar a {
+            margin: 0 15px;
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .navbar a.active {
+            font-weight: bold;
+            border-bottom: 2px solid white;
+        }
+
+        .icons i, .icons a {
+            margin-left: 15px;
+            font-size: 1.5rem;
+            color: white;
+            cursor: pointer;
+        }
+
+        .search-form {
+            display: none;
+        }
+
+        .home {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            padding: 50px;
+            background: #ffeaa7;
+        }
+
+        .home .content {
+            flex: 1 1 50%;
+        }
+
+        .home .content h3 {
+            font-size: 3rem;
+            color: #2d3436;
+        }
+
+        .home .content p {
+            margin: 20px 0;
+            font-size: 1.2rem;
+        }
+
+        .home .btn {
+            padding: 10px 20px;
+            background: #ff4757;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .home .image {
+            flex: 1 1 40%;
+        }
+
+        .home .image img {
+            width: 100%;
+        }
+
+        section {
+            padding: 50px;
+        }
+
+        .heading {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+        }
+
+        .heading span {
+            color: #ff4757;
+        }
+
+        .box-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .box {
+            background: #f1f2f6;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .box:hover {
+            transform: translateY(-10px);
+        }
+
+        .box img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .box h3 {
+            margin-top: 10px;
+            font-size: 1.5rem;
+        }
+
+        .stars i {
+            color: #ff4757;
+        }
+
+        .price {
+            font-size: 1.2rem;
+            color: #ff4757;
+            font-weight: bold;
+        }
+
+        .steps .box-container .box img {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 10px;
+        }
+
+        .steps .box-container .box {
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 10px;
+        }
+
+        .footer {
+            background: #2d3436;
+            color: white;
+            padding: 50px 20px;
+            text-align: center;
+        }
+
+        .footer .share a {
+            margin: 0 10px;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .footer .links {
+            margin: 20px 0;
+        }
+
+        .footer .links a {
+            margin: 0 10px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .credit {
+            margin-top: 20px;
+            font-size: 1rem;
+        }
+
+        #scroll-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #ff4757;
+            color: white;
+            padding: 10px;
+            font-size: 2rem;
+            border-radius: 50%;
+            text-align: center;
+            display: none;
+            z-index: 1000;
+        }
+
+        .loader-container {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .loader-container img {
+            width: 100px;
+        }
+
+        /* Responsive */
+        @media (max-width:768px){
+            header{
+                padding: 20px;
+            }
+            .home{
+                flex-direction: column;
+                text-align: center;
+            }
+            .home .content h3{
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width:450px){
+            .home .content h3{
+                font-size: 2rem;
+            }
+            .box img {
+                height: 150px;
+            }
+        }
+    </style>
+    <!-- Internal CSS ends here -->
+
+    <!-- Font Awesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body>
+    <!-- Header Section -->
+    <header>
+        <a href="#" class="logo"><i class="fas fa-utensils"></i>FoodExpress</a>
+        
+        <nav class="navbar">
+            <a href="index.html" class="active">Home</a>
+            <a href="menu.html">Menu</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+        
+        <div class="icons">
+            <i class="fas fa-search" id="search-icon"></i>
+            <a href="cart.html" class="fas fa-shopping-cart"></a>
+            <i class="fas fa-bars" id="menu-bars"></i>
+        </div>
+        
+        <div class="search-form">
+            <input type="search" id="search-box" placeholder="Search here...">
+            <label for="search-box" class="fas fa-search"></label>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="home" id="home">
+        <div class="content">
+            <h3>Food made with love</h3>
+            <p>Enjoy the finest dishes from top restaurants in your city, delivered fast to your doorstep. Order now and satisfy your cravings!</p>
+            <a href="menu.html" class="btn">Order Now</a>
+        </div>
+        
+        <div class="image">
+            <img src="ff.png" alt="Delicious food">
+        </div>
+    </section>
+
+    <!-- Special Dishes Section -->
+    <section class="speciality" id="speciality">
+        <h1 class="heading">Our <span>Speciality</span></h1>
+        
+        <div class="box-container">
+            <div class="box">
+                <img class="image" src="muttonHandi1.jpg" alt="Mutton">
+                <div class="content">
+                    <img src="Mutton Masala Handi.avif" alt="Mutton Masla Handi">
+                    <h3>Mutton Rassa</h3>
+                    <p>Special Mutton Masala, Kolhapuri Rassa</p>
+                </div>
+            </div>
+            
+            <div class="box">
+                <img class="image" src="chickenFry1.jpg" alt="Chicken Fry">
+                <div class="content">
+                    <img src="chicken Fry.jpg" alt="chicken Fry Handi">
+                    <h3>Chicken Fry Handi</h3>
+                    <p>Special Chicken Fry Handi</p>
+                </div>
+            </div>
+            
+            <div class="box">
+                <img class="image" src="kabab1.jpg" alt="Kabab">
+                <div class="content">
+                    <img src="kabab.jpg" alt="Kabab">
+                    <h3>Kabab</h3>
+                    <p>Special Kabab</p>
+                </div>
+            </div>
+            
+            <div class="box">
+                <img class="image" src="biryani1.jpg" alt="Biryani">
+                <div class="content">
+                    <img src="Biryani.avif" alt="Biryani">
+                    <h3>Special Biryani</h3>
+                    <p>Special Chicken Biryani</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Items Section -->
+    <section class="popular" id="popular">
+        <h1 class="heading">Most <span>Popular</span> Foods</h1>
+        
+        <div class="box-container">
+            <!-- Chicken -->
+            <div class="box">
+                <span class="price"> 800.Rs </span>
+                <img src="chickenFry1.jpg" alt="chicken">
+                <h3>Chicken Fry</h3>
+                <div class="stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                </div>
+                <a href="#" class="btn add-to-cart" data-name="Chicken Fry" data-price="800.Rs">Add to Cart</a>
+            </div>
+            
+            <div class="box">
+                <span class="price"> 900.Rs </span>
+                <img src="chickenMasala2.jpg" alt="Chicken">
+                <h3>Chicken Masala</h3>
+                <div class="stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+                </div>
+                <a href="#" class="btn add-to-cart" data-name="Chicken Masala" data-price="900.Rs">Add to Cart</a>
+            </div>
+            
+            <div class="box">
+                <span class="price"> 700.Rs </span>
+                <img src="chickenPanjabi3.jpg" alt="Chicken">
+                <h3>Chicken Panjani</h3>
+                <div class="stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+                <a href="#" class="btn add-to-cart" data-name="Chicken Panjani" data-price="700.Rs">Add to Cart</a>
+            </div>
+            
+            <div class="box">
+                <span class="price"> 850.Rs </span>
+                <img src="chickenCurry4.webp" alt="Chicken">
+                <h3>Chicken Curry</h3>
+                <div class="stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+                </div>
+                <a href="#" class="btn add-to-cart" data-name="Chicken Curry" data-price="850.Rs">Add to Cart</a>
+            </div>
+            <div class="box">
+                <span class="price"> 950.Rs </span>
+                <img src="green Chicken5.jpg" alt="Chciken">
+                <h3>Green Chicken</h3>
+                <div class="stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+                </div>
+                <a href="#" class="btn add-to-cart" data-name="Green Chicken" data-price="950.Rs">Add to Cart</a>
+            </div>
+
+            <!-- Mutton -->
+            <div class="box">
+                <span class="price"> 1200.Rs </span>
+                <img src="MuttonMasala1.jpg" alt="Mutton">
+                <h3>Mutton Masala</h3>
+                <div class="stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+                </div>
+                <a href="#" class="btn add-to-cart" data-name="Mutton Masala" data-price="1200.Rs">Add to Cart</a>
+            </div>
+            <div class="box">
+                <span class="price"> 1000.Rs </span>
+                <img src="MuttonBengali2.jpg" alt="Mutton">
+                <h3>Mutton Bengali</h3>
+                <div class="stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+                </div>
+                <a href="#" class="btn add-to-cart" data-name="Muttton Bengali" data-price="1000.Rs">Add to Cart</a>
+            </div>
+            <div class="box">
+                <span class="price"> 1300.Rs </span>
+                <img src="MuttonCurry3.webp" alt="Mutton">
+                <h3>Mutton Curry</h3>
+                <div class="stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+                </div>
+                <a href="#" class="btn add-to-cart" data-name="Mutton Curry" data-price="1300.Rs">Add to Cart</a>
+            </div>
+            <div class="box">
+                <span class="price"> 1050.Rs </span>
+                <img src="Muttonrezala-4.webp" alt="Mutton">
+                <h3>Mutton Rezala</h3>
+                <div class="stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+                </div>
+                <a href="#" class="btn add-to-cart" data-name="Mutton Rezala" data-price="1050.Rs">Add to Cart</a>
+            </div>
+            <div class="box">
+                <span class="price"> 1400.rs</span>
+                <img src="MuttonChops5.jpg" alt="Mutton">
+                <h3>Mutton Chops</h3>
+                <div class="stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+                </div>
+                <a href="#" class="btn add-to-cart" data-name="Mutton Chops" data-price="1400.Rs">Add to Cart</a>
+            </div>
+
+            <!-- Kabaab -->
+            <div class="box">
+                <span class="price"> 300.Rs</span>
+                <img src="kabab1.jpg" alt="Kabab">
+                <h3>Kabab</h3>
+                <div class="stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+                </div>
+                <a href="#" class="btn add-to-cart" data-name="Kabab" data-price="300.Rs">Add to Cart</a>
+            </div>
+            <div class="box">
+                <span class="price"> 350.Rs</span>
+                <img src="TandooriGuldasta 2.jpg" alt="kabab">
+                <h3>Tandoori Guldasta</h3>
+                <div class="stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+                </div>
+                <a href="#" class="btn add-to-cart" data-name="Tandoori Guldasta" data-price="350.Rs">Add to Cart</a>
+            </div>
+            <div class="box">
+                <span class="price"> 400.Rs</span>
+                <img src="Tandoori-Platter 3.png" alt="Kabab">
+                <h3>Tandoori-Platter</h3>
+                <div class="stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+                </div>
+                <a href="#" class="btn add-to-cart" data-name="Tandoori-Platter" data-price="400.Rs">Add to Cart</a>
+            </div>
+            <div class="box">
+                <span class="price"> 500.Rs</span>
+                <img src="Murgh-Nizami-Kebab 4.webp" alt="Kabab">
+                <h3>Murgh-Nizami-Kebab</h3>
+                <div class="stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+                </div>
+                <a href="#" class="btn add-to-cart" data-name="Murgh-Nizami-Kebab" data-price="500.Rs">Add to Cart</a>
+            </div>
+            <div class="box">
+                <span class="price"> 250.Rs</span>
+                <img src="tangdi-kebab-5.jpg" alt="kabab">
+                <h3>tangdi-kabab</h3>
+                <div class="stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+                </div>
+                <a href="#" class="btn add-to-cart" data-name="tangdi-kabab" data-price="250.Rs">Add to Cart</a>
+            </div>
+            <!--  -->
+            <div class="box">
+                <span class="price"> 1400.rs</span>
+                <img src="MuttonChops5.jpg" alt="Mutton">
+                <h3>Mutton Chops</h3>
+                <div class="stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+                </div>
+                <a href="#" class="btn add-to-cart" data-name="Mutton Chops" data-price="1400.Rs">Add to Cart</a>
+            </div>
+            <div class="box">
+                <span class="price"> 1400.rs</span>
+                <img src="MuttonChops5.jpg" alt="Mutton">
+                <h3>Mutton Chops</h3>
+                <div class="stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+                </div>
+                <a href="#" class="btn add-to-cart" data-name="Mutton Chops" data-price="1400.Rs">Add to Cart</a>
+            </div>
+            <div class="box">
+                <span class="price"> 1400.rs</span>
+                <img src="MuttonChops5.jpg" alt="Mutton">
+                <h3>Mutton Chops</h3>
+                <div class="stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+                </div>
+                <a href="#" class="btn add-to-cart" data-name="Mutton Chops" data-price="1400.Rs">Add to Cart</a>
+            </div>
+            <div class="box">
+                <span class="price"> 1400.rs</span>
+                <img src="MuttonChops5.jpg" alt="Mutton">
+                <h3>Mutton Chops</h3>
+                <div class="stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+                </div>
+                <a href="#" class="btn add-to-cart" data-name="Mutton Chops" data-price="1400.Rs">Add to Cart</a>
+            </div>
+            <div class="box">
+                <span class="price"> 1400.rs</span>
+                <img src="MuttonChops5.jpg" alt="Mutton">
+                <h3>Mutton Chops</h3>
+                <div class="stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+                </div>
+                <a href="#" class="btn add-to-cart" data-name="Mutton Chops" data-price="1400.Rs">Add to Cart</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="steps">
+        <h1 class="heading">How It <span>Works</span></h1>
+        <div class="box-container">
+            <div class="box">
+                <img src="Screenshot 2025-05-12 234722.png" alt="Choose Food">
+                <h3>Choose Your Favorite Food</h3>
+            </div>
+            <div class="box">
+                <img src="Fast-Delivery-Vector-Illustration.jpg" alt="Fast Delivery">
+                <h3>Free and Fast Delivery</h3>
+            </div>
+            <div class="box">
+                <img src="payment.avif" alt="Payment">
+                <h3>Easy Payment Methods</h3>
+            </div>
+            <div class="box">
+                <img src="order.png" alt="Enjoy">
+                <h3>And Finally, Enjoy Your Food</h3>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <section class="footer">
+        <div class="share">
+            <a href="#" class="btn"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="btn"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="btn"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="btn"><i class="fab fa-linkedin"></i></a>
+            <a href="#" class="btn"><i class="fab fa-pinterest"></i></a>
+        </div>
+        
+        <div class="links">
+            <a href="index.html">Home</a>
+            <a href="menu.html">Menu</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+        </div>
+        
+        <div class="credit">
+            Created by <span>Your Name</span> | All Rights Reserved
+        </div>
+    </section>
+
+    <!-- Scroll Top Button -->
+    <a href="#home" class="fas fa-angle-up" id="scroll-top"></a>
+
+    <!-- Loading Animation -->
+    <div class="loader-container">
+        <img src="images/loader.gif" alt="Loading...">
+    </div>
+    <script>
+        // Hide the loader once the page is fully loaded
+        window.addEventListener('load', () => {
+            const loader = document.querySelector('.loader-container');
+            loader.style.display = 'none';
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,26 @@
+/* Responsive Styles */
+@media (max-width: 991px) {
+    html {
+        font-size: 90%;
+    }
+}
+
+@media (max-width: 768px) {
+    header {
+        flex-wrap: wrap;
+    }
+    header .navbar {
+        display: none;
+    }
+    header .navbar.active {
+        display: block;
+        width: 100%;
+        background: #ff6f61;
+    }
+}
+
+@media (max-width: 450px) {
+    html {
+        font-size: 80%;
+    }
+}
